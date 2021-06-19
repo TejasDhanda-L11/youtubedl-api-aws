@@ -1,20 +1,17 @@
 from flask import Flask, request, jsonify
-import youtube_dl as you
+import functions
 
-
-def YoutubeDL(url):
-    y = you.YoutubeDL()
-    r = y.extract_info(url=url, download=False)
-    # for r1 in r:
-    #     print(str(r1)+' : '+str(r[r1]))
-    return r
-
+link1 =  'https://www.youtube.com/playlist?list=PLCOOUY9uAnn82EnBxCXpN6uF9pYVTvBqQ'
+link2 = 'https://www.youtube.com/playlist?list=PLcNq9x4oCMDvj7Gmhcifsky8T65L7Pdbh'
 
 app = Flask(__name__)
 
-
 @app.route('/api', methods=['GET'])
-def YoutubeApi():
+def YoutubeApiPlaylist():
     initialLink = str(request.args['link'])
-    rawData = YoutubeDL(initialLink)
-    return jsonify(rawData)
+    #test.playlistRawDataModifier(playlistUrl=initialLink)
+    # return jsonify(functions.YoutubeDL(initialLink))
+    return jsonify(functions.playlistRawDataModifier(playlistUrl=initialLink))
+
+if __name__ == '__main__':
+    app.run(debug=True)
