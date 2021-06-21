@@ -12,7 +12,7 @@ def YoutubeDL(url):
 
 
 
-def playlistRawDataModifier(playlistUrl):
+def playlistRawDataModifierDiff_AUD_VID(playlistUrl):
     playlistRawData = YoutubeDL(playlistUrl)
     mapDataToBeReturned ={}
     # title playlist
@@ -81,3 +81,63 @@ def playlistRawDataModifier(playlistUrl):
     return (mapDataToBeReturned)
 # playlistRawDataModifier(YoutubeDL('https://www.youtube.com/playlist?list=PLCOOUY9uAnn82EnBxCXpN6uF9pYVTvBqQ'))
 
+def playlistRawDataModifier_SingleVid(playlistUrl):
+    playlistRawData = YoutubeDL(playlistUrl)
+    mapDataToBeReturned = {}
+    # title playlist
+    title_playlist = playlistRawData['title']
+    # print('title_playlist = ' + str(title_playlist))
+    mapDataToBeReturned['title'] = title_playlist
+    mapDataToBeReturned['video'] = {}
+
+    # individual video stuff
+
+    listIndividualVideos = []
+
+    entriesInPlaylist = playlistRawData['entries']
+    numEntryVideo = -1
+    for eachEntry in entriesInPlaylist:
+        # print('eachEntry = ' + str(eachEntry))
+        numEntryVideo += 1
+        # print(eachEntry)
+        # video title
+        returnabletitleVideo = eachEntry['title']
+        # print('titleVideo ' + str(returnabletitleVideo))
+        # link highest quality
+        listOfFormats = eachEntry['formats']
+        # print('listOFFFFFFFFFF' +str(listOfFormats))
+        curentHighestQualityVid = {}
+
+        # getting to know best format datas
+        for eachFormatNum in range(len(listOfFormats)):
+            currentFormat = listOfFormats[eachFormatNum]
+            # VIDEO
+            if currentFormat['vcodec'] != 'none' and currentFormat['acodec'] != 'none':
+                curentHighestQualityVid[str(eachFormatNum)] = int(currentFormat['format_note'].split('p')[0])
+            # Audio
+
+
+        sortedcurentHighestQualityVid_List = sorted(
+            curentHighestQualityVid.items(),
+            key=
+            lambda qual: -qual[1]
+        )
+        # print(curentHighestQualityVid)
+        bestVidFormatNumber = int(sortedcurentHighestQualityVid_List[0][0])
+
+        returnableVidURL = listOfFormats[bestVidFormatNumber]['url']
+        returnableFormat = listOfFormats[bestVidFormatNumber]['format_note']
+
+        mapDataToBeReturned['video'][numEntryVideo] = {
+            'titleVid': (returnabletitleVideo),
+            'URLVid': (returnableVidURL),
+            'format': returnableFormat
+
+
+        }
+        # print(sortedcurentHighestQualityVid_List)
+        # print(bestVidFormatNumber)
+        # print(sortedcurentHighestQualityAud_List)
+        # print(bestAudFormatNumber)
+    # print(mapDataToBeReturned)
+    return (mapDataToBeReturned)

@@ -11,7 +11,7 @@ def YoutubeApiPlaylist():
     initialLink = str(request.args['link'])
     #test.playlistRawDataModifier(playlistUrl=initialLink)
     # return jsonify(functions.YoutubeDL(initialLink))
-    return jsonify(functions.playlistRawDataModifier(playlistUrl=initialLink))
+    return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=8080, host='0.0.0.0', debug=True)
