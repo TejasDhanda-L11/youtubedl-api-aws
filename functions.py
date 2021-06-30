@@ -86,9 +86,11 @@ def playlistRawDataModifier_SingleVid(playlistUrl):
     mapDataToBeReturned = {}
     # title playlist
     title_playlist = playlistRawData['title']
+
     # print('title_playlist = ' + str(title_playlist))
     mapDataToBeReturned['title'] = title_playlist
     mapDataToBeReturned['video'] = {}
+    mapDataToBeReturned['uploader'] = playlistRawData['uploader']
 
     # individual video stuff
 
@@ -96,6 +98,9 @@ def playlistRawDataModifier_SingleVid(playlistUrl):
 
     entriesInPlaylist = playlistRawData['entries']
     numEntryVideo = -1
+    # print('entriesInPlaylist = '+str(entriesInPlaylist))
+    # print('nov = '+str(len(entriesInPlaylist)))
+    mapDataToBeReturned['number_of_videos'] = int(len(entriesInPlaylist))
     for eachEntry in entriesInPlaylist:
         # print('eachEntry = ' + str(eachEntry))
         numEntryVideo += 1
@@ -131,7 +136,12 @@ def playlistRawDataModifier_SingleVid(playlistUrl):
         mapDataToBeReturned['video'][numEntryVideo] = {
             'titleVid': (returnabletitleVideo),
             'URLVid': (returnableVidURL),
-            'format': returnableFormat
+            'format': returnableFormat,
+            'duration': int(eachEntry['duration']),
+            'description': eachEntry['description'],
+            'thumbnail': eachEntry['thumbnail'],
+            'is_live': eachEntry['is_live'],
+            'upload_date': eachEntry['upload_date']
 
 
         }

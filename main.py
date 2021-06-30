@@ -6,12 +6,18 @@ link2 = 'https://www.youtube.com/playlist?list=PLcNq9x4oCMDvj7Gmhcifsky8T65L7Pdb
 
 app = Flask(__name__)
 
-@app.route('/api', methods=['GET'])
+@app.route('/pl', methods=['GET'])
 def YoutubeApiPlaylist():
-    initialLink = str(request.args['link'])
+    initialLink = str(request.args['l'])
     #test.playlistRawDataModifier(playlistUrl=initialLink)
     # return jsonify(functions.YoutubeDL(initialLink))
     return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink))
-
+# just for testing purpose
+# @app.route('/pla', methods=['GET'])
+# def YoutubeApiPlaylista():
+#     initialLink = str(request.args['l'])
+#     #test.playlistRawDataModifier(playlistUrl=initialLink)
+#     return jsonify(functions.YoutubeDL(initialLink))
+#     # return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink))
 if __name__ == '__main__':
     app.run(port=8080, host='0.0.0.0', debug=True)
