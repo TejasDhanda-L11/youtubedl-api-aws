@@ -1,8 +1,8 @@
 import youtube_dl as you
 
 
-def YoutubeDL(url):
-    y = you.YoutubeDL()
+def YoutubeDL(url,playlistend=-1,playliststart=1):
+    y = you.YoutubeDL(params={'playliststart':playliststart,"playlistend":playlistend,"ignoreerrors":True})
     r = y.extract_info(url=url, download=False)
     return r
 # print(YoutubeDL('https://www.youtube.com/playlist?list=PLCOOUY9uAnn82EnBxCXpN6uF9pYVTvBqQ'))
@@ -12,8 +12,8 @@ def YoutubeDL(url):
 
 
 
-def playlistRawDataModifierDiff_AUD_VID(playlistUrl):
-    playlistRawData = YoutubeDL(playlistUrl)
+def playlistRawDataModifierDiff_AUD_VID(playlistUrl,playlistend=-1,playliststart=1):
+    playlistRawData = YoutubeDL(playlistUrl,playlistend=playlistend, playliststart=playliststart)
     mapDataToBeReturned ={}
     # title playlist
     title_playlist = playlistRawData['title']
@@ -81,8 +81,8 @@ def playlistRawDataModifierDiff_AUD_VID(playlistUrl):
     return (mapDataToBeReturned)
 # playlistRawDataModifier(YoutubeDL('https://www.youtube.com/playlist?list=PLCOOUY9uAnn82EnBxCXpN6uF9pYVTvBqQ'))
 
-def playlistRawDataModifier_SingleVid(playlistUrl):
-    playlistRawData = YoutubeDL(playlistUrl)
+def playlistRawDataModifier_SingleVid(playlistUrl,playlistend=-1,playliststart=1):
+    playlistRawData = YoutubeDL(playlistUrl,playlistend=playlistend, playliststart=playliststart)
     mapDataToBeReturned = {}
     # title playlist
     title_playlist = playlistRawData['title']
@@ -101,53 +101,55 @@ def playlistRawDataModifier_SingleVid(playlistUrl):
     # print('entriesInPlaylist = '+str(entriesInPlaylist))
     # print('nov = '+str(len(entriesInPlaylist)))
     mapDataToBeReturned['number_of_videos'] = int(len(entriesInPlaylist))
+    # print(entriesInPlaylist)
     for eachEntry in entriesInPlaylist:
-        # print('eachEntry = ' + str(eachEntry))
-        numEntryVideo += 1
-        # print(eachEntry)
-        # video title
-        returnabletitleVideo = eachEntry['title']
-        # print('titleVideo ' + str(returnabletitleVideo))
-        # link highest quality
-        listOfFormats = eachEntry['formats']
-        # print('listOFFFFFFFFFF' +str(listOfFormats))
-        curentHighestQualityVid = {}
+        if eachEntry !=None:
+            print(eachEntry)
 
-        # getting to know best format datas
-        for eachFormatNum in range(len(listOfFormats)):
-            currentFormat = listOfFormats[eachFormatNum]
-            # VIDEO
-            if currentFormat['vcodec'] != 'none' and currentFormat['acodec'] != 'none':
-                curentHighestQualityVid[str(eachFormatNum)] = int(currentFormat['format_note'].split('p')[0])
-            # Audio
+            # print('eachEntry = ' + str(eachEntry))
+            numEntryVideo += 1
+            # print(eachEntry)
+            # video title
+            returnabletitleVideo = eachEntry['title']
+            # print('titleVideo ' + str(returnabletitleVideo))
+            # link highest quality
+            listOfFormats = eachEntry['formats']
+            # print('listOFFFFFFFFFF' +str(listOfFormats))
+            curentHighestQualityVid = {}
 
+            # getting to know best format datas
+            for eachFormatNum in range(len(listOfFormats)):
+                currentFormat = listOfFormats[eachFormatNum]
+                # VIDEO
+                if currentFormat['vcodec'] != 'none' and currentFormat['acodec'] != 'none':
+                    curentHighestQualityVid[str(eachFormatNum)] = int(currentFormat['format_note'].split('p')[0])
+                # Audio
 
-        sortedcurentHighestQualityVid_List = sorted(
-            curentHighestQualityVid.items(),
-            key=
-            lambda qual: -qual[1]
-        )
-        # print(curentHighestQualityVid)
-        bestVidFormatNumber = int(sortedcurentHighestQualityVid_List[0][0])
+            sortedcurentHighestQualityVid_List = sorted(
+                curentHighestQualityVid.items(),
+                key=
+                lambda qual: -qual[1]
+            )
+            # print(curentHighestQualityVid)
+            bestVidFormatNumber = int(sortedcurentHighestQualityVid_List[0][0])
 
-        returnableVidURL = listOfFormats[bestVidFormatNumber]['url']
-        returnableFormat = listOfFormats[bestVidFormatNumber]['format_note']
+            returnableVidURL = listOfFormats[bestVidFormatNumber]['url']
+            returnableFormat = listOfFormats[bestVidFormatNumber]['format_note']
 
-        mapDataToBeReturned['video'][numEntryVideo] = {
-            'titleVid': (returnabletitleVideo),
-            'URLVid': (returnableVidURL),
-            'format': returnableFormat,
-            'duration': int(eachEntry['duration']),
-            'description': eachEntry['description'],
-            'thumbnail': eachEntry['thumbnail'],
-            'is_live': eachEntry['is_live'],
-            'upload_date': eachEntry['upload_date']
+            mapDataToBeReturned['video'][numEntryVideo] = {
+                'titleVid': (returnabletitleVideo),
+                'URLVid': (returnableVidURL),
+                'format': returnableFormat,
+                'duration': int(eachEntry['duration']),
+                'description': eachEntry['description'],
+                'thumbnail': eachEntry['thumbnail'],
+                'is_live': eachEntry['is_live'],
+                'upload_date': eachEntry['upload_date']
 
-
-        }
-        # print(sortedcurentHighestQualityVid_List)
-        # print(bestVidFormatNumber)
-        # print(sortedcurentHighestQualityAud_List)
-        # print(bestAudFormatNumber)
-    # print(mapDataToBeReturned)
+            }
+            # print(sortedcurentHighestQualityVid_List)
+            # print(bestVidFormatNumber)
+            # print(sortedcurentHighestQualityAud_List)
+            # print(bestAudFormatNumber)
+        # print(mapDataToBeReturned)
     return (mapDataToBeReturned)

@@ -9,9 +9,11 @@ app = Flask(__name__)
 @app.route('/pl', methods=['GET'])
 def YoutubeApiPlaylist():
     initialLink = str(request.args['l'])
+    playlistend_String = str(request.args.get('e',-1))
+    playliststart_String = str(request.args.get('s',1))
     #test.playlistRawDataModifier(playlistUrl=initialLink)
     # return jsonify(functions.YoutubeDL(initialLink))
-    return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink))
+    return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink,playlistend=int(playlistend_String), playliststart=int(playliststart_String)))
 # just for testing purpose
 # @app.route('/pla', methods=['GET'])
 # def YoutubeApiPlaylista():
