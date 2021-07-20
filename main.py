@@ -14,6 +14,10 @@ def YoutubeApiPlaylist():
     #test.playlistRawDataModifier(playlistUrl=initialLink)
     # return jsonify(functions.YoutubeDL(initialLink))
     return jsonify(functions.playlistRawDataModifier_SingleVid(playlistUrl=initialLink,playlistend=int(playlistend_String), playliststart=int(playliststart_String)))
+@app.route('/v',methods=['GET'])
+def YoutubeApiVideo():
+    initialLink = str(request.args['l'])
+    return jsonify(functions.getDataOfOnlyParticularVideo(videoUrl= initialLink))
 # just for testing purpose
 # @app.route('/pla', methods=['GET'])
 # def YoutubeApiPlaylista():
